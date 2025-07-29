@@ -7,12 +7,12 @@ exports.createStaff = async (req, res) => {
 };
 
 exports.updateStaff = async (req, res) => {
-  const staff = await Staff.findByIdAndUpdate(req.params.staffId, req.body, { new: true });
+  const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(staff);
 };
 
 exports.getStaffById = async (req, res) => {
-  const staff = await Staff.findById(req.params.staffId).populate('role');
+  const staff = await Staff.findById(req.params.id).populate('role');
   res.json(staff);
 };
 

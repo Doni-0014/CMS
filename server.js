@@ -9,7 +9,7 @@ connectDB();
 app.use(express.json());
 
 // Routes
-app.use('/api', require('./routes/admin'));
+app.use('/api/admin', require('./routes/admin'));
 // ... other routes
 
 // Start Server

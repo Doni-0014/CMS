@@ -33,9 +33,10 @@ router.get('/doctors', doctorController.getAllDoctors);
 router.patch('/doctors/:id/deactivate', doctorController.deactivateDoctor);
 
 // Specialization Routes
-router.post('/specializations', validateSpecialization, specializationController.createSpecialization);
+router.post('/specializations', validateSpecialization, specializationController.addSpecialization);
 router.put('/specializations/:id', validateSpecialization, specializationController.updateSpecialization);
 router.get('/specializations/:id', specializationController.getSpecializationById);
 router.get('/specializations', specializationController.getAllSpecializations);
 
 module.exports = router;
+``
