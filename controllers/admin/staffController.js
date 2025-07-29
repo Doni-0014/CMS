@@ -1,12 +1,21 @@
 const Staff = require('../../models/admin/Staff');
+const { validationResult } = require('express-validator');
 
 exports.createStaff = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   const staff = new Staff(req.body);
   await staff.save();
   res.status(201).json(staff);
 };
 
 exports.updateStaff = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(staff);
 };

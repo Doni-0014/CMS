@@ -1,12 +1,21 @@
 const Doctor = require('../../models/admin/Doctor');
+const { validationResult } = require('express-validator');
 
 exports.createDoctor = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   const doctor = new Doctor(req.body);
   await doctor.save();
   res.status(201).json(doctor);
 };
 
 exports.updateDoctor = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   const doctor = await Doctor.findByIdAndUpdate(req.params.doctorId, req.body, { new: true });
   res.json(doctor);
 };
