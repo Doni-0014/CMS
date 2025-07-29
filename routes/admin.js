@@ -39,4 +39,3 @@ router.get('/specializations/:id', specializationController.getSpecializationByI
 router.get('/specializations', specializationController.getAllSpecializations);
 
 module.exports = router;
-``
