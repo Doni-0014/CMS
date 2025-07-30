@@ -51,8 +51,10 @@ router.get("/appointments/status", appointmentValidator.listByStatus, appointmen
 
 // Billing
 router.post("/billing", billingValidator.generateBill, billingController.generate);
+router.get("/billing", billingController.getAllBills); 
+router.get("/billing/id/:billId", billingController.getBillById); 
 router.put("/billing/:appointmentId", billingValidator.updateBill, billingController.update);
-router.get("/billing/:appointmentId", billingController.getByAppointmentId);
-router.get("/billing", billingValidator.listBillsByRange, billingController.listByDateRange);
+router.get("/billing/:appointmentId", billingController.getByAppointmentId); 
+router.get("/billing/range", billingValidator.listBillsByRange, billingController.listByDateRange);
 
 module.exports = router;
