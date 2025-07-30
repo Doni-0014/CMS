@@ -4,6 +4,4 @@ exports.validateDoctor = [
   body('name').notEmpty().withMessage('Doctor name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
   body('phone').notEmpty().withMessage('Phone number is required'),
-  body('specializationId').notEmpty().withMessage('Specialization is required'),
-  body('experience').optional().isNumeric().withMessage('Experience must be a number'),
 ];
