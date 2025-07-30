@@ -1,18 +1,22 @@
 const express = require("express");
+const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-require("dotenv").config();
 
-const app = express();
-
-// Connect to MongoDB
+dotenv.config();
 connectDB();
 
-// Middlewares
+const app = express();
 app.use(express.json());
 
-// Routes
-app.use("/api/yourRoutes", require("./routes/yourRouteFile"));
+// Route mounting
+app.use("/api/receptionist", require("./routes/receptionist"));
+// app.use("/api/admin", require("./routes/admin"));
+// app.use("/api/doctor", require("./routes/doctor"));
+// app.use("/api/labtech", require("./routes/labtech"));
+// app.use("/api/pharmacist", require("./routes/pharmacist"));
 
 // Start server
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

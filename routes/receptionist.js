@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const patientController = require("../Controllers/receptionist/patientController");
-const appointmentController = require("../Controllers/receptionist/appointmentController");
-const billingController = require("../Controllers/receptionist/billingController");
+const patientController = require("../controllers/receptionist/patientController");
+const appointmentController = require("../controllers/receptionist/appointmentController");
+const billingController = require("../controllers/receptionist/billingController");
 
 const patientValidator = require("../validators/receptionist/patientValidator");
 const appointmentValidator = require("../validators/receptionist/appointmentValidator");
