@@ -13,7 +13,7 @@ app.use("/api/receptionist", require("./routes/receptionist"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/doctor", require("./routes/doctorRoutes"));
 // app.use("/api/labtech", require("./routes/labtech"));
-// app.use("/api/pharmacist", require("./routes/pharmacist"));
+app.use("/api/pharmacist", require("./routes/pharmacist"));
 
 // Start server
 const PORT = process.env.PORT || 8000;
