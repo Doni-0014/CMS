@@ -29,4 +29,3 @@ router.get('/inventory/medicine', inventoryController.getAllInventory);
 router.patch('/inventory/medicine/:id/flag-low', inventoryController.flagLowStock);
 
 module.exports = router;
-

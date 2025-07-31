@@ -82,15 +82,6 @@ const getConsultationsValidator = [
         .optional()
         .isMongoId()
         .withMessage('Patient ID must be a valid MongoDB ID'),
-    (req, res, next) => {
-        const { appointmentId, doctorId, patientId } = req.query;
-        if (!appointmentId && !doctorId && !patientId) {
-            return res.status(400).json({
-                message: 'Please provide either appointmentId, doctorId, or patientId as a query parameter.'
-            });
-        }
-        next();
-    },
     handleValidationErrors
 ];
 
@@ -107,15 +98,6 @@ const getConsultationHistoryValidator = [
         .optional()
         .isMongoId()
         .withMessage('Patient ID must be a valid MongoDB ID'),
-    (req, res, next) => {
-        const { appointmentId, doctorId, patientId } = req.query;
-        if (!appointmentId && !doctorId && !patientId) {
-            return res.status(400).json({
-                message: 'Please provide either appointmentId, doctorId, or patientId as a query parameter.'
-            });
-        }
-        next();
-    },
     handleValidationErrors
 ];
 
@@ -169,15 +151,6 @@ const getMedPrescriptionsValidator = [
         .optional()
         .isMongoId()
         .withMessage('Patient ID must be a valid MongoDB ID'),
-    (req, res, next) => {
-        const { appointmentId, patientId } = req.query;
-        if (!appointmentId && !patientId) {
-            return res.status(400).json({
-                message: 'Please provide either appointmentId or patientId as a query parameter.'
-            });
-        }
-        next();
-    },
     handleValidationErrors
 ];
 
@@ -186,23 +159,10 @@ const getMedicinePrescriptionHistoryValidator = [
         .optional()
         .isMongoId()
         .withMessage('Appointment ID must be a valid MongoDB ID'),
-    query('doctorId')
-        .optional()
-        .isMongoId()
-        .withMessage('Doctor ID must be a valid MongoDB ID'),
     query('patientId')
         .optional()
         .isMongoId()
         .withMessage('Patient ID must be a valid MongoDB ID'),
-    (req, res, next) => {
-        const { appointmentId, doctorId, patientId } = req.query;
-        if (!appointmentId && !doctorId && !patientId) {
-            return res.status(400).json({
-                message: 'Please provide either appointmentId, doctorId, or patientId as a query parameter.'
-            });
-        }
-        next();
-    },
     handleValidationErrors
 ];
 
@@ -256,15 +216,6 @@ const getTestPrescriptionsValidator = [
         .optional()
         .isMongoId()
         .withMessage('Patient ID must be a valid MongoDB ID'),
-    (req, res, next) => {
-        const { appointmentId, patientId } = req.query;
-        if (!appointmentId && !patientId) {
-            return res.status(400).json({
-                message: 'Please provide either appointmentId or patientId as a query parameter.'
-            });
-        }
-        next();
-    },
     handleValidationErrors
 ];
 

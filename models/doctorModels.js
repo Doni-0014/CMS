@@ -12,8 +12,8 @@ const ConsultationNote = mongoose.model('consultation', consultationSchema);
 
 
 const medicinePrescription = new mongoose.Schema({
-    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'appointment' },
-    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'patient' },
+    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' },
+    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient' },
     medicines: String,
     description: String
 })
@@ -21,8 +21,8 @@ const MedicinePresc = mongoose.model('medicine', medicinePrescription);
 
 
 const labtestPrescription = new mongoose.Schema({
-    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'appointment' },
-    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'patient' },
+    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' },
+    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient' },
     labtests: String,
     description: String
 })

@@ -16,22 +16,32 @@ exports.updateConsultation = async(req, res) =>{
     res.send(cnsltn);
 };
 
-// Combined function to get consultations by appointmentId or doctorId
+// Combined function to get consultations by appointmentId, doctorId, patientId, or all consultations
 exports.getConsultations = async (req, res) => {
     try {
-        const { appointmentId, doctorId } = req.query;
+        const { appointmentId, doctorId, patientId } = req.query;
         let filter = {};
+        
+        // Build filter based on provided parameters
         if (appointmentId) filter.appointmentId = appointmentId;
         if (doctorId) filter.doctorId = doctorId;
-        if (!appointmentId && !doctorId) {
-            return res.status(400).json({ message: 'Please provide either appointmentId or doctorId as a query parameter.' });
-        }
+        if (patientId) filter.patientId = patientId;
+        
+        // If no filters provided, return all consultations
         const consultations = await ConsultationNote.find(filter)
             .populate('appointmentId')
-            .populate('doctorId');
-        res.send(consultations);
+            .populate('doctorId')
+            .populate('patientId')
+            .sort({ createdAt: -1 }); // Sort by newest first
+            
+        res.json({
+            success: true,
+            count: consultations.length,
+            data: consultations
+        });
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: 'Error fetching consultations',
             error: err.message
         });
@@ -54,22 +64,30 @@ exports.updatemedPrescription = async(req, res) =>{
     res.send(medpresc);
 };
 
-// Combined function to get medicine prescriptions by appointmentId or patientId
+// Combined function to get medicine prescriptions by appointmentId, patientId, or all prescriptions
 exports.getMedPrescriptions = async (req, res) => {
     try {
         const { appointmentId, patientId } = req.query;
         let filter = {};
+        
+        // Build filter based on provided parameters
         if (appointmentId) filter.appointmentId = appointmentId;
         if (patientId) filter.patientId = patientId;
-        if (!appointmentId && !patientId) {
-            return res.status(400).json({ message: 'Please provide either appointmentId or patientId as a query parameter.' });
-        }
+        
+        // If no filters provided, return all medicine prescriptions
         const medPrescriptions = await MedicinePresc.find(filter)
             .populate('appointmentId')
-            .populate('patientId');
-        res.send(medPrescriptions);
+            .populate('patientId')
+            .sort({ createdAt: -1 }); // Sort by newest first
+            
+        res.json({
+            success: true,
+            count: medPrescriptions.length,
+            data: medPrescriptions
+        });
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: 'Error fetching medicine prescriptions',
             error: err.message
         });
@@ -93,22 +111,30 @@ exports.updatelabPrescription = async(req, res) =>{
     res.send(labtestpresc);
 };
 
-// Combined function to get test prescriptions by appointmentId or patientId
+// Combined function to get test prescriptions by appointmentId, patientId, or all prescriptions
 exports.getTestPrescriptions = async (req, res) => {
     try {
         const { appointmentId, patientId } = req.query;
         let filter = {};
+        
+        // Build filter based on provided parameters
         if (appointmentId) filter.appointmentId = appointmentId;
         if (patientId) filter.patientId = patientId;
-        if (!appointmentId && !patientId) {
-            return res.status(400).json({ message: 'Please provide either appointmentId or patientId as a query parameter.' });
-        }
+        
+        // If no filters provided, return all test prescriptions
         const testPrescriptions = await LabtestPresc.find(filter)
             .populate('appointmentId')
-            .populate('patientId');
-        res.send(testPrescriptions);
+            .populate('patientId')
+            .sort({ createdAt: -1 }); // Sort by newest first
+            
+        res.json({
+            success: true,
+            count: testPrescriptions.length,
+            data: testPrescriptions
+        });
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: 'Error fetching test prescriptions',
             error: err.message
         });
@@ -118,18 +144,13 @@ exports.getTestPrescriptions = async (req, res) => {
 /******************************************************************************************************/
 
 //Consultation History functions
-//get comprehensive consultation history by appointmentID, doctorID, or patientID
+//get comprehensive consultation history by appointmentID, doctorID, patientID, or all consultations
 exports.getConsultationHistory = async (req, res) => {
     try {
         const { appointmentId, doctorId, patientId } = req.query;
-        
-        if (!appointmentId && !doctorId && !patientId) {
-            return res.status(400).json({ 
-                message: 'Please provide either appointmentId, doctorId, or patientId as a query parameter.' 
-            });
-        }
-
         let filter = {};
+        
+        // Build filter based on provided parameters
         if (appointmentId) filter.appointmentId = appointmentId;
         if (doctorId) filter.doctorId = doctorId;
         if (patientId) filter.patientId = patientId;
@@ -141,54 +162,44 @@ exports.getConsultationHistory = async (req, res) => {
             .populate('patientId')
             .sort({ createdAt: -1 });
 
-        const consultationHistory = {
-            consultations: consultations,
-            summary: {
-                totalConsultations: consultations.length
-            }
-        };
-
-        res.json(consultationHistory);
+        res.json({
+            success: true,
+            count: consultations.length,
+            data: consultations
+        });
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: 'Error fetching consultation history',
             error: err.message
         });
     }
 };
 
-//get comprehensive medicine prescription history by appointmentID, doctorID, or patientID
+//get comprehensive medicine prescription history by appointmentID or patientID
 exports.getMedicinePrescriptionHistory = async (req, res) => {
     try {
-        const { appointmentId, doctorId, patientId } = req.query;
-        
-        if (!appointmentId && !doctorId && !patientId) {
-            return res.status(400).json({ 
-                message: 'Please provide either appointmentId, doctorId, or patientId as a query parameter.' 
-            });
-        }
-
+        const { appointmentId, patientId } = req.query;
         let filter = {};
+        
+        // Build filter based on provided parameters
         if (appointmentId) filter.appointmentId = appointmentId;
-        if (doctorId) filter.doctorId = doctorId;
         if (patientId) filter.patientId = patientId;
-
-        // Get medicine prescriptions
+        
+        // If no filters provided, return all medicine prescriptions
         const medicinePrescriptions = await MedicinePresc.find(filter)
             .populate('appointmentId')
             .populate('patientId')
             .sort({ createdAt: -1 });
 
-        const medicinePrescriptionHistory = {
-            medicinePrescriptions: medicinePrescriptions,
-            summary: {
-                totalMedicinePrescriptions: medicinePrescriptions.length
-            }
-        };
-
-        res.json(medicinePrescriptionHistory);
+        res.json({
+            success: true,
+            count: medicinePrescriptions.length,
+            data: medicinePrescriptions
+        });
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: 'Error fetching medicine prescription history',
             error: err.message
         });
