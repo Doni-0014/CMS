@@ -15,6 +15,7 @@ const { validateSpecialization } = require('../validators/admin/specializationVa
 router.post('/staff', validateStaff, staffController.createStaff);
 router.put('/staff/:id', validateStaff, staffController.updateStaff);
 router.get('/staff/:id', staffController.getStaffById);
+router.get('/staff/staffid/:staffId', staffController.getStaffByStaffId);
 router.get('/staff', staffController.getAllStaff);
 router.patch('/staff/:id/deactivate', staffController.deactivateStaff);
 

@@ -25,6 +25,18 @@ exports.getStaffById = async (req, res) => {
   res.json(staff);
 };
 
+exports.getStaffByStaffId = async (req, res) => {
+  try {
+    const staff = await Staff.findOne({ staffId: req.params.staffId }).populate('role');
+    if (!staff) {
+      return res.status(404).json({ message: 'Staff not found with the given staff ID' });
+    }
+    res.json(staff);
+  } catch (error) {
+    res.status(500).json({ message: 'Error finding staff', error: error.message });
+  }
+};
+
 exports.getAllStaff = async (req, res) => {
   const staff = await Staff.find().populate('role');
   res.json(staff);
