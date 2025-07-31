@@ -16,13 +16,28 @@ exports.updateRole = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const role = await Role.findByIdAndUpdate(req.params.roleId, req.body, { new: true });
-  res.json(role);
+  
+  try {
+    const role = await Role.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!role) {
+      return res.status(404).json({ message: 'Role not found' });
+    }
+    res.json(role);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getRoleById = async (req, res) => {
-  const role = await Role.findById(req.params.roleId);
-  res.json(role);
+  try {
+    const role = await Role.findById(req.params.id);
+    if (!role) {
+      return res.status(404).json({ message: 'Role not found' });
+    }
+    res.json(role);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getAllRoles = async (req, res) => {
@@ -31,6 +46,13 @@ exports.getAllRoles = async (req, res) => {
 };
 
 exports.deactivateRole = async (req, res) => {
-  const role = await Role.findByIdAndUpdate(req.params.roleId, { active: false }, { new: true });
-  res.json(role);
+  try {
+    const role = await Role.findByIdAndUpdate(req.params.id, { active: false }, { new: true });
+    if (!role) {
+      return res.status(404).json({ message: 'Role not found' });
+    }
+    res.json(role);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

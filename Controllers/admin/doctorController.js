@@ -6,9 +6,17 @@ exports.createDoctor = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const doctor = new Doctor(req.body);
-  await doctor.save();
-  res.status(201).json(doctor);
+  
+  try {
+    const doctor = new Doctor(req.body);
+    await doctor.save();
+    res.status(201).json(doctor);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Doctor with this email already exists' });
+    }
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.updateDoctor = async (req, res) => {
@@ -16,13 +24,28 @@ exports.updateDoctor = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const doctor = await Doctor.findByIdAndUpdate(req.params.doctorId, req.body, { new: true });
-  res.json(doctor);
+  
+  try {
+    const doctor = await Doctor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+    res.json(doctor);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getDoctorById = async (req, res) => {
-  const doctor = await Doctor.findById(req.params.doctorId).populate('specialization');
-  res.json(doctor);
+  try {
+    const doctor = await Doctor.findById(req.params.id).populate('specialization');
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+    res.json(doctor);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getAllDoctors = async (req, res) => {
@@ -31,6 +54,13 @@ exports.getAllDoctors = async (req, res) => {
 };
 
 exports.deactivateDoctor = async (req, res) => {
-  const doctor = await Doctor.findByIdAndUpdate(req.params.doctorId, { active: false }, { new: true });
-  res.json(doctor);
+  try {
+    const doctor = await Doctor.findByIdAndUpdate(req.params.id, { active: false }, { new: true });
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+    res.json(doctor);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

@@ -6,9 +6,17 @@ exports.createStaff = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const staff = new Staff(req.body);
-  await staff.save();
-  res.status(201).json(staff);
+  
+  try {
+    const staff = new Staff(req.body);
+    await staff.save();
+    res.status(201).json(staff);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Staff with this email already exists' });
+    }
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.updateStaff = async (req, res) => {
@@ -16,13 +24,28 @@ exports.updateStaff = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(staff);
+  
+  try {
+    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!staff) {
+      return res.status(404).json({ message: 'Staff not found' });
+    }
+    res.json(staff);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getStaffById = async (req, res) => {
-  const staff = await Staff.findById(req.params.id).populate('role');
-  res.json(staff);
+  try {
+    const staff = await Staff.findById(req.params.id).populate('role');
+    if (!staff) {
+      return res.status(404).json({ message: 'Staff not found' });
+    }
+    res.json(staff);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getStaffByStaffId = async (req, res) => {
@@ -43,6 +66,13 @@ exports.getAllStaff = async (req, res) => {
 };
 
 exports.deactivateStaff = async (req, res) => {
-  const staff = await Staff.findByIdAndUpdate(req.params.staffId, { active: false }, { new: true });
-  res.json(staff);
+  try {
+    const staff = await Staff.findByIdAndUpdate(req.params.id, { active: false }, { new: true });
+    if (!staff) {
+      return res.status(404).json({ message: 'Staff not found' });
+    }
+    res.json(staff);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

@@ -6,9 +6,17 @@ exports.addSpecialization = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const specialization = new Specialization(req.body);
-  await specialization.save();
-  res.status(201).json(specialization);
+  
+  try {
+    const specialization = new Specialization(req.body);
+    await specialization.save();
+    res.status(201).json(specialization);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Specialization with this name already exists' });
+    }
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.updateSpecialization = async (req, res) => {
@@ -16,13 +24,28 @@ exports.updateSpecialization = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const specialization = await Specialization.findByIdAndUpdate(req.params.specializationId, req.body, { new: true });
-  res.json(specialization);
+  
+  try {
+    const specialization = await Specialization.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!specialization) {
+      return res.status(404).json({ message: 'Specialization not found' });
+    }
+    res.json(specialization);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getSpecializationById = async (req, res) => {
-  const specialization = await Specialization.findById(req.params.specializationId);
-  res.json(specialization);
+  try {
+    const specialization = await Specialization.findById(req.params.id);
+    if (!specialization) {
+      return res.status(404).json({ message: 'Specialization not found' });
+    }
+    res.json(specialization);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.getAllSpecializations = async (req, res) => {

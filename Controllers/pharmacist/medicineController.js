@@ -20,8 +20,13 @@ exports.getMedicineById = async (req, res) => {
 };
 
 exports.getAllMedicines = async (req, res) => {
-  const medicines = await Medicine.find();
-  res.json(medicines);
+  try {
+    // Only get active medicines by default
+    const medicines = await Medicine.find({ isActive: true }).sort({ name: 1 });
+    res.json(medicines);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.updateMedicine = async (req, res) => {

@@ -12,7 +12,7 @@ app.use(express.json());
 app.use("/api/receptionist", require("./routes/receptionist"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/doctor", require("./routes/doctorRoutes"));
-// app.use("/api/labtech", require("./routes/labtech"));
+app.use("/api/labtech", require("./routes/labtech"));
 app.use("/api/pharmacist", require("./routes/pharmacist"));
 
 // Start server
