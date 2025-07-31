@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const consultationSchema = new mongoose.Schema({
-    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'appointment' },
-    doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'doctor' },
-    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'patient' },
+    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' },
+    doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor' },
+    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient' },
     symptoms: String,
     diagnosis: String,
     Notes: String,
