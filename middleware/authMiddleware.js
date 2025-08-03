@@ -27,7 +27,7 @@ const authenticateToken = async (req, res, next) => {
       });
     }
 
-    // Add admin info to request
+    // Add admin info to request.
     req.adminId = decoded.adminId;
     req.admin = admin;
     next();
